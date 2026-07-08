@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  background-color: #FFF8F0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFC580;
+  border-radius: 4px;
+}
+
+@layer components {
+  /* Passbook / ledger card — the signature MunimJi component */
+  .passbook-card {
+    background: #FFFFFF;
+    border: 1px solid #EFE6D8;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .passbook-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: repeating-linear-gradient(
+      to bottom,
+      #FF9933 0px,
+      #FF9933 8px,
+      transparent 8px,
+      transparent 16px
+    );
+  }
+  .passbook-row {
+    border-bottom: 1px dashed #E7DCC8;
+  }
+  .passbook-row:last-child {
+    border-bottom: none;
+  }
+  .rupee-mark::before {
+    content: '₹';
+    font-weight: 600;
+  }
+}
