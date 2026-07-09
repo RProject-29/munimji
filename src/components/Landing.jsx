@@ -195,7 +195,7 @@ export default function Landing({ onEnter }) {
         {/* Munim character */}
         <div className="landing-munim-wrap">
           <img
-            src="/src/assets/munim-mascot.png"
+            src='/munim-mascot.png'
             alt="MunimJi"
             className="landing-munim-img"
           />
