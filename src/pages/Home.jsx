@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import munimImg from '../assets/munim-mascot.png'
+const munimImg = '/munim-mascot.png'
 import {
   GraduationCap,
   Calculator,

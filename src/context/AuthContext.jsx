@@ -63,7 +63,10 @@ export function AuthProvider({ children }) {
   }
 
   const isGuest = !user
-  const displayName = backendUser?.name || user?.displayName || 'Friend'
+  const displayName = 
+    (backendUser?.name && backendUser.name !== 'MunimJi User' && backendUser.name !== 'Google User')
+      ? backendUser.name
+      : user?.displayName || user?.email?.split('@')[0] || 'Friend'
   const displayEmail = backendUser?.email || user?.email || ''
 
   return (

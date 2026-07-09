@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useLanguage, LANGUAGES } from '../context/LanguageContext.jsx'
-import munimImg from '../assets/munim-mascot.png'
+const munimImg = '/munim-mascot.png'
 
 export default function Layout({ children }) {
   const location = useLocation()

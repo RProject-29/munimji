@@ -18,7 +18,7 @@ import {
 import PassbookCard from '../components/PassbookCard.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { formatINR } from '../utils/financeMath.js'
-import munimImg from '../assets/munim-mascot.png'
+const munimImg = '/munim-mascot.png'
 import DailyTipCard from '../components/DailyTipCard.jsx'
 
 const GOAL_ICONS = {
@@ -63,14 +63,16 @@ export default function Dashboard() {
         <div>
           <p className="text-xs text-ink-faint uppercase tracking-wide">Welcome back</p>
           <h1 className="font-display text-2xl md:text-3xl font-semibold text-navy mt-0.5">
-            {displayName?.split(' ')[0] || 'Friend'} 👋
+            {(displayName && displayName !== 'MunimJi User' ? displayName : user?.displayName || user?.email?.split('@')[0] || 'Friend').split(' ')[0]} 👋
           </h1>
         </div>
-        <img
-          src={munimImg}
-          alt="Munim"
-          className="w-16 h-20 object-contain object-top"
-        />
+        <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-saffron shadow-md flex-shrink-0">
+          <img
+            src={munimImg}
+            alt="Munim"
+            className="w-full h-full object-cover object-top scale-110"
+          />
+        </div>
       </div>
 
       {/* Daily tip */}

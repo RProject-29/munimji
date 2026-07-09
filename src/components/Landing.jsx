@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext.jsx'
-import munimImg from '../assets/munim-mascot.png'
+const munimImg = '/munim-mascot.png'
 
 // ─── 3D Financial Element Components ─────────────────────────────
 

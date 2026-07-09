@@ -4,7 +4,7 @@ import { getTodaysTip } from '../data/dailyTips.js'
 
 import { useLanguage } from '../context/LanguageContext.jsx'
 
-import munimImg from '../assets/munim-mascot.png'
+const munimImg = '/munim-mascot.png'
 
 export default function DailyTipCard({ compact = false }) {
   const tip = getTodaysTip()

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Sparkles, Send, AlertCircle, Mic, MicOff } from 'lucide-react'
 import { askAiMunim } from '../utils/geminiClient.js'
 import { useLanguage } from '../context/LanguageContext.jsx'
-import munimImg from '../assets/munim-mascot.png'
+const munimImg = '/munim-mascot.png'
 
 const SUGGESTIONS = [
   'What is SIP?',
