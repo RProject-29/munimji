@@ -18,6 +18,9 @@ import { useAuth } from '../context/AuthContext.jsx'
 import { api } from '../utils/api.js'
 import { formatINR } from '../utils/financeMath.js'
 
+import { Trophy, CheckCircle2 } from 'lucide-react'
+
+
 const GOAL_TYPES = [
   { id: 'bike', label: 'Bike', icon: Bike },
   { id: 'laptop', label: 'Laptop', icon: Laptop },
@@ -34,6 +37,18 @@ export default function Goals() {
   const [loading, setLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)
   const [error, setError] = useState('')
+  const [toast, setToast] = useState(null)
+
+  function showToast(message, type = 'success') {
+    setToast({ message, type })
+    setTimeout(() => setToast(null), 4000)
+  }
+  // const [toast, setToast] = useState(null)
+
+  // function showToast(message, type = 'success') {
+  //   setToast({ message, type })
+  //   setTimeout(() => setToast(null), 4000)
+  // }
 
   useEffect(() => {
     if (!isGuest) {
@@ -69,14 +84,33 @@ export default function Goals() {
     }
   }
 
-  async function handleUpdateSaved(id, newAmount) {
+  // async function handleUpdateSaved(id, newAmount) {
+  //   try {
+  //     const data = await api.updateGoal(id, { savedAmount: newAmount })
+  //     setGoals((prev) => prev.map((g) => g._id === id ? data.goal : g))
+  //   } catch (err) {
+  //     setError('Failed to update goal')
+  //   }
+  // }
+
+async function handleUpdateSaved(id, newAmount, targetAmount) {
     try {
       const data = await api.updateGoal(id, { savedAmount: newAmount })
       setGoals((prev) => prev.map((g) => g._id === id ? data.goal : g))
+      if (Number(newAmount) >= Number(targetAmount)) {
+        showToast('🎉 Congratulations! Goal achieved! You did it!', 'celebrate')
+      } else {
+        showToast('Savings updated successfully! Keep going 💪', 'success')
+      }
     } catch (err) {
       setError('Failed to update goal')
     }
   }
+
+
+
+
+
 
   if (isGuest) {
     return (
@@ -118,9 +152,50 @@ export default function Goals() {
 
   return (
     <div className="space-y-4 md:max-w-2xl">
+      {toast && (
+        <div style={{
+          position: 'fixed', top: 80, left: '50%', transform: 'translateX(-50%)',
+          zIndex: 9999, background: toast.type === 'celebrate' ? '#FFF3E0' : '#e8f5e9',
+          border: `1.5px solid ${toast.type === 'celebrate' ? '#FF9933' : '#138808'}`,
+          borderRadius: 14, padding: '12px 20px', display: 'flex', alignItems: 'center',
+          gap: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: 260, maxWidth: 340,
+        }}>
+          <span style={{ fontSize: 20 }}>{toast.type === 'celebrate' ? '🎉' : '✅'}</span>
+          <p style={{ color: toast.type === 'celebrate' ? '#E67E00' : '#138808', fontSize: 13, fontWeight: 600, flex: 1 }}>
+            {toast.message}
+          </p>
+          <button onClick={() => setToast(null)} style={{ opacity: 0.6, fontSize: 16, background: 'none', border: 'none', cursor: 'pointer' }}>×</button>
+        </div>
+      )}
+
+      {/* <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-xl md:text-2xl font-semibold text-navy">Goals</h1> */}
+
+
+{toast && (
+        <div style={{
+          position: 'fixed', top: 80, left: '50%', transform: 'translateX(-50%)',
+          zIndex: 9999, background: toast.type === 'celebrate' ? '#FFF3E0' : '#e8f5e9',
+          border: `1.5px solid ${toast.type === 'celebrate' ? '#FF9933' : '#138808'}`,
+          borderRadius: 14, padding: '12px 20px', display: 'flex', alignItems: 'center',
+          gap: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: 260, maxWidth: 340,
+        }}>
+          <span style={{ fontSize: 20 }}>{toast.type === 'celebrate' ? '🎉' : '✅'}</span>
+          <p style={{ color: toast.type === 'celebrate' ? '#E67E00' : '#138808', fontSize: 13, fontWeight: 600, flex: 1 }}>
+            {toast.message}
+          </p>
+          <button onClick={() => setToast(null)} style={{ opacity: 0.6, fontSize: 16, background: 'none', border: 'none', cursor: 'pointer' }}>×</button>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-xl md:text-2xl font-semibold text-navy">Goals</h1>
+
+
+
+          
           <p className="text-ink-light text-sm mt-1">
             {loading ? 'Loading...' : `${goals.length} active goal${goals.length !== 1 ? 's' : ''}`}
           </p>
@@ -192,12 +267,25 @@ export default function Goals() {
                     type="number"
                     placeholder="Update saved amount"
                     className="flex-1 text-xs border border-saffron-100 rounded-lg px-2 py-1.5 focus:outline-none focus:border-saffron"
-                    onKeyDown={(e) => {
+                    // onKeyDown={(e) => {
+                    //   if (e.key === 'Enter') {
+                    //     handleUpdateSaved(goal._id, Number(e.target.value))
+                    //     e.target.value = ''
+                    //   }
+                    // }}
+
+onKeyDown={(e) => {
                       if (e.key === 'Enter') {
-                        handleUpdateSaved(goal._id, Number(e.target.value))
+                        handleUpdateSaved(goal._id, Number(e.target.value), goal.targetAmount)
                         e.target.value = ''
                       }
                     }}
+
+
+
+
+
+
                   />
                   <span className="text-[10px] text-ink-faint">Press Enter to update</span>
                 </div>
@@ -210,7 +298,7 @@ export default function Goals() {
         </div>
       )}
 
-      {showAddModal && (
+      {/* {showAddModal && (
         <AddGoalModal
           onClose={() => setShowAddModal(false)}
           onAdded={(newGoal) => {
@@ -218,12 +306,27 @@ export default function Goals() {
             setShowAddModal(false)
           }}
         />
+      )} */}
+
+
+{showAddModal && (
+        <AddGoalModal
+          onClose={() => setShowAddModal(false)}
+          onToast={showToast}
+          onAdded={(newGoal) => {
+            setGoals((prev) => [newGoal, ...prev])
+            setShowAddModal(false)
+          }}
+        />
       )}
+
+
+
     </div>
   )
 }
 
-function AddGoalModal({ onClose, onAdded }) {
+function AddGoalModal({ onClose, onAdded,onToast }) {
   const [type, setType] = useState('bike')
   const [label, setLabel] = useState('')
   const [targetAmount, setTargetAmount] = useState('')
@@ -235,7 +338,18 @@ function AddGoalModal({ onClose, onAdded }) {
     e.preventDefault()
     if (!label.trim() || !targetAmount) return setError('Please fill in all fields')
     setLoading(true)
-    try {
+    // try {
+    //   const data = await api.createGoal({
+    //     type,
+    //     label: label.trim(),
+    //     targetAmount: Number(targetAmount),
+    //     savedAmount: Number(savedAmount) || 0,
+    //   })
+    //   onAdded(data.goal)
+    // } catch (err) {
+
+
+try {
       const data = await api.createGoal({
         type,
         label: label.trim(),
@@ -243,7 +357,9 @@ function AddGoalModal({ onClose, onAdded }) {
         savedAmount: Number(savedAmount) || 0,
       })
       onAdded(data.goal)
+      onToast(`Goal "${label}" created successfully! Keep saving 💪`, 'success')
     } catch (err) {
+
       setError(err.message)
     } finally {
       setLoading(false)
