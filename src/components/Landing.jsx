@@ -509,7 +509,7 @@ export default function Landing({ onEnter }) {
           }
         }
 
-        /* Mobile responsive */
+           /* Mobile responsive */
         @media (max-width: 640px) {
           .landing-stats {
             padding: 10px 8px;
@@ -528,15 +528,44 @@ export default function Landing({ onEnter }) {
             font-size: 15px;
             padding: 13px 28px;
           }
+          /* Scale down ALL floating elements on mobile */
+          .coin-3d {
+            transform: scale(0.5) !important;
+            transform-origin: center;
+          }
         }
 
-        /* Hide floating elements on very small screens to avoid clutter */
+        /* Mobile — shrink floating elements, don't hide them */
+        @media (max-width: 640px) {
+          .coin-3d {
+            transform: scale(0.55) !important;
+            transform-origin: center center;
+          }
+          .landing-root svg {
+            transform: scale(0.55);
+            transform-origin: center center;
+          }
+          .landing-root > div[style*="position: absolute"] {
+            opacity: 0.35 !important;
+          }
+        }
+
         @media (max-width: 480px) {
-          .landing-root > div:not(.landing-grid):not(.landing-content) {
-            display: none;
+          /* On very small phones, hide most floating elements
+             but keep a few subtle ones for visual texture */
+          .landing-root > div:not(.landing-grid):not(.landing-content):not(.landing-munim-wrap) {
+            opacity: 0 !important;
+            pointer-events: none;
+          }
+          /* Show just 2-3 subtle elements */
+          .landing-root > div[style*="top: 8%"][style*="left: 6%"],
+          .landing-root > div[style*="top: 7%"][style*="right: 18%"],
+          .landing-root > div[style*="bottom: 12%"][style*="right: 5%"] {
+            opacity: 0.2 !important;
+            transform: scale(0.5) !important;
           }
           .landing-content {
-            padding: 0 20px;
+            padding: 0 16px;
           }
         }
 
